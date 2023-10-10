@@ -2,10 +2,18 @@
 #include <FirebaseESP8266.h>
 #include <Servo.h>
 #include <TimeLib.h>
+#include <SoftwareSerial.h>
+#include <FirebaseArduino.h>
+#include <ArduinoJson.h>
+#include <ESP8266HTTPClient.h>
 
 
-const char* ssid = "Rafiqul";
-const char* password = "rafiquljakir";
+#define FIREBASE_HOST "medibox-45997-default-rtdb.firebaseio.com/"
+#define FIREBASE_AUTH "jvl3BVlcV7frNx9wmv2yqOodTUlTnoVhaJj1mL4t"
+#define WIFI_SSID "Belal" //provide ssid (wifi name)
+#define WIFI_PASSWORD "123456780" //wifi password
+
+
 Servo servo1, servo2, servo3, servo4, servo5, servo6;
 int buzzerPin = 16; // D0
 int switchPin = 5; // D1
@@ -19,12 +27,6 @@ int beepDuration = 100;
 const char* firebaseHost = "medibox-45997-default-rtdb.firebaseio.com/";
 const char* firebaseAuth = "jvl3BVlcV7frNx9wmv2yqOodTUlTnoVhaJj1mL4t";
 */
-FirebaseConfig firebaseConfig;
-firebaseConfig.host = "medibox-45997-default-rtdb.firebaseio.com";
-firebaseConfig.auth_type = "legacy"; // Assuming you're using legacy authentication
-
-FirebaseAuth firebaseAuth;
-firebaseAuth.token = "jvl3BVlcV7frNx9wmv2yqOodTUlTnoVhaJj1mL4t";
 
 
 FirebaseData firebaseData;
@@ -46,7 +48,18 @@ void setup() {
   servo5.attach(drawers[4],500,2500);
   servo6.attach(drawers[5],500,2500);
   
-  connectToWiFi();
+  //connectToWiFi();
+
+    Serial.println("Connecting to WiFi");
+  WiFi.begin("Rafiqul","1311109265");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting...");
+  }
+  Serial.println("Connected to WiFi");
+
+  // Initialize Firebase
+  Firebase.begin(&FIREBASE_HOST, &FIREBASE_AUTH);
 }
 
 void loop() {
@@ -90,19 +103,19 @@ void loop() {
   }
 }
 
-void connectToWiFi() {
-  Serial.println("Connecting to WiFi");
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting...");
-  }
-  Serial.println("Connected to WiFi");
+// void connectToWiFi() {
+//   Serial.println("Connecting to WiFi");
+//   WiFi.begin("Rafiqul","1311109265");
+//   while (WiFi.status() != WL_CONNECTED) {
+//     delay(1000);
+//     Serial.println("Connecting...");
+//   }
+//   Serial.println("Connected to WiFi");
 
-  // Initialize Firebase
-  Firebase.begin(&firebaseConfig, &firebaseAuth);
+//   // Initialize Firebase
+//   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
 
-}
+// }
 
 void open_Drawer(Servo servo, int Min_Angle, int Max_Angle){
 
