@@ -28,49 +28,39 @@ FirebaseJson json;
 const long utcOffsetInSeconds = 21600; // UTC offset for your timezone (in seconds)
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
-<<<<<<< HEAD
 
-//----------------Start Time Counter Section-----------------------------------------------------------
-unsigned long startTime; // Variable to store the start time
-int countdownDuration; // Variable to store the countdown duration in minutes
-int timePassed;   
+
+unsigned long startTime , elapsedTime; // Variable to store the start time 
 unsigned long lastAlarmOffTime = 0;
 
-void time_counter(int minutes) {
-  countdownDuration = minutes;
-  startTime = millis(); // Record the start time
-}
 
-int check_time() {
-  unsigned long currentTime = millis(); // Get the current time
-  unsigned long elapsedTime = (currentTime - startTime) / 60000; // Calculate elapsed time in minutes
-  Serial.println("From Check Function = " + String(elapsedTime));
-  if (elapsedTime >= countdownDuration) {
-    return 1; // Time has passed
-  }
-}
-
-//------------------End TimeCounter Section-----------------------------------------------------------
-
-=======
-unsigned long startTime;
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
 
 void setup() {
   Serial.begin(115200);
-  startTime = millis();
+
   pinMode(buzzerPin, OUTPUT);
   pinMode(switchPin, INPUT_PULLUP);
   for(int i = 0; i < 6; i++) {
     pinMode(drawers[i], OUTPUT);
   }
-  
-  servo1.attach(drawers[0],500,2500); // Attach servo to pins
+
+  // Attach servo to pins
+  servo1.attach(drawers[0],500,2500); 
   servo2.attach(drawers[1],500,2500);
   servo3.attach(drawers[2],500,2500);
   servo4.attach(drawers[3],500,2500);
   servo5.attach(drawers[4],500,2500);
   servo6.attach(drawers[5],500,2500);
+
+  // ALl Drawer Close
+  close_Drawer(servo1,179, 180);
+  close_Drawer(servo2,179, 180);
+  close_Drawer(servo3,179, 180);
+  close_Drawer(servo4,179, 180);
+  close_Drawer(servo5,179, 180);
+  close_Drawer(servo6,179, 180);
+
+  Serial.println("All Drawe close \n");
   
   connectToWiFi();
   configTime(0, 0, "pool.ntp.org", "5");
@@ -81,10 +71,15 @@ void setup() {
 
   timeClient.begin();
   timeClient.update();
+
+
+  
+
+
 }
 
 void loop() {
-  time_counter(2);
+  startTime = millis();
   timeClient.update();
   int currentHour = timeClient.getHours();
   int currentMinute = timeClient.getMinutes();
@@ -92,6 +87,7 @@ void loop() {
 
   String path;
   String date = today_date();
+
   if(date != NULL){
     path = "/1694256957188366/" + date;
   }
@@ -103,19 +99,11 @@ void loop() {
   p_sokale_khawar_age = path + "/Morning Before";
   p_sokale_khawar_pore = path + "/Morning After";
   p_dupure_khawar_age = path + "/Afternoon Before";
-<<<<<<< HEAD
   p_dupure_khawar_pore = path + "/Afternoon After";
   p_rate_khawar_age = path + "/Night Before";
   p_rate_khawar_pore = path + "/Night After";
 
-  //Drawer opening Time Scheduling 
-=======
-  p_dupure_khawar_pore = path + "Afternoon After";
-  p_rate_khawar_age = path + "/Night Before";
-  p_rate_khawar_pore = path + "Night After";
-
-
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
+  //Drawer opening Time Scheduling (set From Android APp)
   sokale_khawar_age = get_target_time("/Patient-Time-Scheduling/1694256957188366/Morning Before");
   sokale_khawar_pore = get_target_time("/Patient-Time-Scheduling/1694256957188366/Morning After");
   dupure_khawar_age = get_target_time("/Patient-Time-Scheduling/1694256957188366/Afternoon Before");
@@ -124,7 +112,7 @@ void loop() {
   rate_khawar_pore = get_target_time("/Patient-Time-Scheduling/1694256957188366/Night After");
 
 
-<<<<<<< HEAD
+
   Serial.print(currentTime + " = " + sokale_khawar_age + "\n");
   Serial.print(currentTime + " = " + sokale_khawar_pore + "\n");
   Serial.print(currentTime + " = " + dupure_khawar_age + "\n");
@@ -138,7 +126,7 @@ void loop() {
         return;
       }
 
-      timePassed = check_time();
+
       open_Drawer(servo1,55,180,"servo1");
 
   } else if(currentTime.equals(sokale_khawar_pore) ) {
@@ -147,7 +135,7 @@ void loop() {
         return;
       }
 
-      timePassed = check_time();
+
       open_Drawer(servo2,40,180,"servo2");
 
   }  else if(currentTime.equals(dupure_khawar_age) ) {
@@ -155,7 +143,7 @@ void loop() {
       if (millis() - lastAlarmOffTime < 60000) {
         return;
       }
-      timePassed = check_time();
+
       open_Drawer(servo3,40,180,"servo3");
 
   } else if(currentTime.equals(dupure_khawar_pore)) {
@@ -163,7 +151,7 @@ void loop() {
       if (millis() - lastAlarmOffTime < 60000) {
         return;
       }
-      timePassed = check_time();
+
       open_Drawer(servo4,40,180,"servo4");
 
   } else if(currentTime.equals(rate_khawar_age) ) {
@@ -171,49 +159,16 @@ void loop() {
       if (millis() - lastAlarmOffTime < 60000) {
         return;
       }
-      timePassed = check_time();
-      open_Drawer(servo4,40,180,"servo5");
+
+      open_Drawer(servo5,40,180,"servo5");
 
   } else if(currentTime.equals(rate_khawar_pore) ) {
 
       if (millis() - lastAlarmOffTime < 60000) {
         return;
       }
-      timePassed = check_time();
+
       open_Drawer(servo6,45,180,"servo6");
-=======
-  Serial.print("Sokale Khawar age = " + sokale_khawar_age + "\n");
-  Serial.print("Sokale khawar pore = " + sokale_khawar_pore + "\n");
-  Serial.print("Dupure khawar Age = " + dupure_khawar_age + "\n");
-  Serial.print("Dupure khawar pore = " + dupure_khawar_pore + "\n");
-  Serial.print("Rate khawar age = " + rate_khawar_age + "\n");
-  Serial.print("Rate khawar pore = " + rate_khawar_pore + "\n");
-
-  if(currentTime.equals(sokale_khawar_age)) {
-
-    open_Drawer(servo1,55,180,"servo1");
-
-  } else if(currentTime.equals(sokale_khawar_pore) ) {
-
-    open_Drawer(servo2,0,0,"servo2");
-
-  }  else if(currentTime.equals(dupure_khawar_age) ) {
-
-    open_Drawer(servo3,40,180,"servo3");
-
-  } else if(currentTime.equals(dupure_khawar_pore)) {
-
-    open_Drawer(servo4,40,180,"servo4");
-
-  } else if(currentTime.equals(rate_khawar_age) ) {
-
-    open_Drawer(servo4,40,180,"servo5");
-
-  } else if(currentTime.equals(rate_khawar_pore) ) {
-
-    open_Drawer(servo6,45,180,"servo6");
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
-
   }else{
     Serial.println("Test success\n");
   }
@@ -244,11 +199,10 @@ void open_Drawer(Servo servo, int Min_Angle, int Max_Angle, String servo_name){
     servo.write(angle);
     delay(15);               
   } 
-<<<<<<< HEAD
-  start:
+
   Serial.println(servo_name + " Activated Successfully\n");
 
-  while(timePassed != 1) {
+  while(true) {
     Serial.println("Inside Loop \n");
 
     digitalWrite(buzzerPin, HIGH); // Turn on buzzer
@@ -259,15 +213,7 @@ void open_Drawer(Servo servo, int Min_Angle, int Max_Angle, String servo_name){
 
       // Patient pressed the switch indicating medicine taken
       lastAlarmOffTime = millis();
-=======
 
-  while(true) {
-    digitalWrite(buzzerPin, HIGH); // Turn on buzzer
-    delay(100);
-    digitalWrite(buzzerPin, LOW); // Turn off buzzer
-    if(digitalRead(switchPin) == LOW) { // switch pin LOW means Switch is ON
-      // Patient pressed the switch indicating medicine taken
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
       if(servo_name == "servo1"){
 
           Firebase.setString(firebaseData, p_sokale_khawar_age, "true");
@@ -301,7 +247,6 @@ void open_Drawer(Servo servo, int Min_Angle, int Max_Angle, String servo_name){
     }else{
       if(servo_name == "servo1"){
 
-<<<<<<< HEAD
         Firebase.setString(firebaseData, p_sokale_khawar_age, "false");
           
       }else if(servo_name.equals("servo2")){
@@ -326,51 +271,23 @@ void open_Drawer(Servo servo, int Min_Angle, int Max_Angle, String servo_name){
       }
 
     }
-    
-    if(timePassed == 1){
+
+
+    unsigned long currentTime = millis(); // Get the current time
+    elapsedTime = (currentTime - startTime) / 60000; // Calculate elapsed time in minutes
+    if (elapsedTime >= 2) {
       Serial.println("\n loop Break Successfully(Time COunter)\n");
-      break;
-    }else{
-      Serial.println(timePassed);
+      close_Drawer(servo,Min_Angle, Max_Angle);
+      break; // Break Loop
+    }
+    else{
+      Serial.println("elapsedTime = " + String(currentTime));
       Serial.println("\n loop Not break Break(Time COunter)\n");
     }
-    goto start;
+    
   }  
   
-  close_Drawer(servo,Min_Angle, Max_Angle);
   Serial.println("\n Drawer Close Successfully(outside loops)\n");
-=======
-        Firebase.setString(firebaseData, p_sokale_khawar_age, "flase");
-          
-      }else if(servo_name.equals("servo2")){
-
-        Firebase.setString(firebaseData, p_sokale_khawar_pore, "flase");
-
-      }else if(servo_name.equals("servo3")){
-
-        Firebase.setString(firebaseData, p_dupure_khawar_age, "flase");
-
-      }else if(servo_name.equals("servo4")){
-
-        Firebase.setString(firebaseData, p_dupure_khawar_pore, "flase");
-
-      }else if(servo_name.equals("servo5")){
-
-        Firebase.setString(firebaseData, p_rate_khawar_age, "flase");
-
-      }else if(servo_name.equals("servo6")){
-
-        Firebase.setString(firebaseData, p_rate_khawar_pore, "flase");
-      }
-
-    }
-
-    if(time_counter(1) == 1){
-      break;
-    }
-  }  
-  close_Drawer(servo,Min_Angle, Max_Angle);
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
 }
 
 
@@ -389,6 +306,7 @@ void close_Drawer(Servo servo, int Min_Angle, int Max_Angle){
 
 //------------------------------------------------------------------------
 String get_target_time(String path){
+
   if (Firebase.getString(firebaseData, path)) { // "/user/kawser/Time"
     if (firebaseData.dataType() == "string") {
       String timeString = firebaseData.stringData();
@@ -402,8 +320,10 @@ String get_target_time(String path){
       return  target_time;
     }
   } else {
+    
     Serial.println("Error getting value");
     Serial.println(firebaseData.errorReason());
+
   }
 }
 
@@ -418,25 +338,8 @@ String convertTo12HourFormat(int hour, int minute) {
     else if (hour == 0)
         hour = 12;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
     return String(hour) + ":" + (minute < 10 ? "0" : "") + String(minute) + " " + period;
 }
-
-
-//------------------------------------------------------------------
-<<<<<<< HEAD
-
-=======
-int time_counter(int minute){
-  unsigned long currentTime = millis(); 
-    if (currentTime - startTime >= minute * 60000) { // 60000 milliseconds = 1 minutes
-    return 1;
-  }
-}
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
 
 
 //------------------------------------------------------------------
@@ -453,9 +356,7 @@ String today_date(){
     date = (day < 10 ? "0" : "") + String(day) + "-" + (month < 10 ? "0" : "") + String(month) + "-" + String(year);
     return date;
   }
-<<<<<<< HEAD
-}
-=======
+
 }
 
->>>>>>> bfecd757792293d0c9337bd4af4398a8eee21547
+
