@@ -225,9 +225,12 @@ void open_Drawer(Servo servo, int Min_Angle, int Max_Angle, String servo_name){
 
   while(true) {
     Serial.println("Inside Loop \n");
+     if (WiFi.status() == WL_CONNECTED) { 
+        buzzer_status = buzzer_led_status("/Patient-Time-Scheduling/1694256957188366/buzzer");
+        led_status = buzzer_led_status("/Patient-Time-Scheduling/1694256957188366/led");
+     }
 
-    buzzer_status = buzzer_led_status("/Patient-Time-Scheduling/1694256957188366/buzzer");
-    led_status = buzzer_led_status("/Patient-Time-Scheduling/1694256957188366/led");
+
     if(buzzer_status == "on"){
       tone(buzzerPin, 1000); // Turn on buzzer
       delay(1000);
@@ -430,4 +433,3 @@ String today_date(){
   }
 
 }
-
