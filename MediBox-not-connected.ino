@@ -202,11 +202,17 @@ void connectToWiFi() {
   Serial.println("Connecting to WiFi");
   WiFi.begin(WIFI_SSID,WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
-
-    delay(1000);
+    
     Serial.println("Connecting...");
+    digitalWrite(LED_pin, HIGH);
+    delay(300);
+    digitalWrite(LED_pin, LOW);// turn the LED off by making the voltage LOW
 
   }
+  digitalWrite(LED_pin, HIGH);
+  delay(1000);
+  digitalWrite(LED_pin, LOW);
+
   Serial.println("Connected to WiFi");
 
 }
