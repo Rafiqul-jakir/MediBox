@@ -10,8 +10,8 @@
 
 #define FIREBASE_HOST "medibox-45997-default-rtdb.firebaseio.com"
 #define FIREBASE_AUTH "jvl3BVlcV7frNx9wmv2yqOodTUlTnoVhaJj1mL4t"
-#define WIFI_SSID "Belal" //provide ssid (wifi name)
-#define WIFI_PASSWORD "123456780" //wifi password
+#define WIFI_SSID "Rafiqul Jakir" //provide ssid (wifi name)
+#define WIFI_PASSWORD "11223344" //wifi password
 
 
 Servo servo1, servo2, servo3, servo4, servo5, servo6;
@@ -378,16 +378,17 @@ void printTime() {
     int N_hours, N_minutes;
     char N_amPm[3];
     sscanf(currentTime_mid.c_str(), "%d:%d %2s", &N_hours, &N_minutes, N_amPm);
-
+    Serial.print("Hourse = " + String(N_hours) + " Mimutes = " + String(N_minutes) + "\n");
     unsigned long currentMillis = millis();
     int B_seconds = currentMillis / 1000;
-    int B_minutes = (B_seconds / 60) + N_minutes;
-    int B_hours = (B_minutes / 60) + N_hours ;
+    int B_minutes = (currentMillis / (60 * 1000)) + N_minutes -1;
+    int B_hours = (currentMillis / (1000 * 60 * 60)) + N_hours ;
 
-    int secondsDisplay = B_seconds % 60;
-    int minutesDisplay = B_minutes % 60;
-    int hoursDisplay = B_hours % 24;
-    currentTime_offline = convertTo12HourFormat(hoursDisplay,minutesDisplay);
+    // int secondsDisplay = B_seconds % 60;
+    // int minutesDisplay = B_minutes % 60;
+    // int hoursDisplay = B_hours % 24;
+    Serial.print("Hourse = " + String(B_hours) + " Mimutes = " + String(B_minutes) + "\n");
+    currentTime_offline = String(B_hours) + ":" + (B_minutes < 10 ? "0" : "") + String(B_minutes) + " " + N_amPm;
 }
 //--------------------------------------------------------------------
 
@@ -429,5 +430,4 @@ String today_date(){
   }
 
 }
-
 
