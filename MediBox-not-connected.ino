@@ -82,9 +82,9 @@ void setup() {
 }
 
 void loop() {
-
+  startTime = millis();
   if(WiFi.status() == WL_CONNECTED){
-    startTime = millis();
+
     timeClient.update();
     currentHour = timeClient.getHours();
     currentMinute = timeClient.getMinutes();
@@ -304,8 +304,8 @@ void open_Drawer(Servo servo, int Min_Angle, int Max_Angle, String servo_name){
     }
 
 
-    unsigned long currentTime = millis(); // Get the current time
-    elapsedTime = (currentTime - startTime); // Calculate elapsed time in milisecond
+    unsigned long currentTime_unsined = millis(); // Get the current time
+    elapsedTime = (currentTime_unsined - startTime); // Calculate elapsed time in milisecond
     if (elapsedTime >= 30000) {
       Serial.println("\n loop Break Successfully(Time COunter)\n");
       close_Drawer(servo,Min_Angle, Max_Angle);
