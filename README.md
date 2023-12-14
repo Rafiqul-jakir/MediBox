@@ -9,6 +9,7 @@ The Smart Medicine Dispenser System, named MediBox, is a smart medicine dispense
 **3. On/Off Switch:** The on/off switch is used to confirm that the patient has taken their medication. It serves as a manual input mechanism to acknowledge the medicine intake.
 
 **4.Mobile App Control:** The mediBox is controlled through an Android app. Users can set the medication schedule, receive reminders, and manually trigger the dispenser through the app.
+App Link [Click Here](https://github.com/Kawser-Ahamed/MediBox)
 
 ## Usage
 **1. Setting Medication Schedule:**
