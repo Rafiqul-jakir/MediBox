@@ -2,8 +2,7 @@
 The Smart Medicine Dispenser System, named MediBox, is a smart medicine dispenser designed to help individuals manage their medication schedule efficiently. This system includes 6 drawers, each controlled by an SG90 servo motor, a buzzer for alarms, an LED indicator for notifications, and an on/off switch to confirm medication intake.
 
 <div style="display: flex; justify-content: space-around;">
-  <img src="https://github.com/Rafiqul-jakir/MediBox/blob/main/MediBox_front_side.jpg" alt="Image 1" width="500" />
-  <img src="https://github.com/Rafiqul-jakir/MediBox/blob/main/Medibox_backSid.jpg" alt="Image 2" width="500" />
+   <img src="https://github.com/Rafiqul-jakir/MediBox/blob/main/MediBox.jpg" alt="Image 1" />
 </div>
 
 ## Features
